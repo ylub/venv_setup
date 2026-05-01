@@ -1,0 +1,155 @@
+Create a production-quality Python script named venv_setup.py in a folder venv_setup/ .
+
+Purpose:
+Automate setup and maintenance of a virtual environment for all Python scripts in the current project folder.
+
+Core features:
+
+1. Project scan
+- Recursively scan the current directory for .py files
+- Exclude:
+  - .venv/
+  - __pycache__/
+  - hidden directories (starting with .)
+  - folders named: legacy, backup, backups, old
+- Handle large directories efficiently
+
+2. Import analysis
+- Parse Python files using the ast module (not regex)
+- Extract all imports (import x, from x import y)
+- Filter out standard library modules
+- Deduplicate results
+
+3. Package resolution
+- Convert import names to pip package names
+- Include mapping dictionary for common cases:
+  docx → python-docx
+  PIL → pillow
+  fitz → PyMuPDF
+  cv2 → opencv-python
+  yaml → PyYAML
+  sklearn → scikit-learn
+  googleapiclient → google-api-python-client
+  google_auth_oauthlib → google-auth-oauthlib
+- Allow easy extension of this mapping
+
+4. requirements.txt
+- Create or update requirements.txt
+- Sort alphabetically
+- Do not overwrite without showing diff (unless --force flag used)
+- Preserve manually added lines when possible
+
+5. Virtual environment management
+- Create .venv if it does not exist
+- Detect OS (macOS/Linux/Windows) and use correct paths
+- Install requirements into the venv using:
+  <venv_python> -m pip install -r requirements.txt
+- Upgrade pip before installing
+
+6. CLI interface (argparse)
+Support flags:
+- --dry-run       → show actions without making changes
+- --rebuild       → delete and recreate .venv (with confirmation)
+- --force         → overwrite requirements.txt without prompt
+- --check         → show environment status:
+    - active python
+    - venv python path
+    - pip version
+    - installed packages
+    - missing packages
+
+7. Safety
+- Never delete anything without explicit confirmation
+- Print clear warnings before destructive actions
+- Handle errors gracefully
+
+8. Output / UX
+- Clean, readable terminal output
+- Use sections (Scan, Imports, Requirements, Venv, Install)
+- Show summary at the end:
+  - number of scripts
+  - number of packages
+  - actions taken
+
+9. Code quality
+- Well-structured functions
+- Inline comments explaining key logic
+- Modular design so features can be extended later
+
+10. Bonus (if reasonable)
+- Cache previous scan results to speed up repeat runs
+- Detect if already inside a venv and warn the user
+
+Make the script robust, readable, and safe for real-world use on macOS.
+
+Additional wizard / UX requirements:
+
+At startup, the script should ask:
+
+“Choose mode:
+1. Wizard
+2. Command-line / flags mode”
+
+Wizard mode:
+- Interactive step-by-step setup
+- Verbose explanations at every step
+- Clearly explain what is being scanned, installed, created, or changed
+- Confirm before writing requirements.txt
+- Confirm before creating .venv
+- Confirm before installing packages
+- Confirm before any destructive action like --rebuild
+
+Both wizard mode and command-line mode:
+- Must be verbose and user-friendly
+- Use several colors that respect the active terminal/iTerm2 profile
+- Do NOT hardcode ugly bright colors only
+- Prefer ANSI styles that work well on macOS Terminal and iTerm2
+- Detect whether color output is supported
+- Provide a --no-color option
+- Use clear section headers, warnings, success messages, and summaries
+
+Wizard navigation commands:
+At every prompt, support these commands:
+
+- help
+  Shows context-sensitive help for the current step
+
+- quit
+  Exits safely without continuing
+
+- back
+  Returns to the previous wizard step when possible
+
+- restart
+  Restarts the wizard from the beginning
+
+The wizard should never trap the user in a step.
+
+Implementation requirements:
+- Use argparse for command-line mode
+- Use a clean WizardState object or equivalent to track:
+  - current step
+  - previous step
+  - selected options
+  - scan results
+  - planned actions
+- Keep wizard logic separate from core venv/requirements logic
+- Core functions should be reusable by both wizard mode and command-line mode
+- Include clear comments explaining how the wizard navigation works
+- Include examples in the help output
+
+Make sure all original functionality is preserved:
+- recursive scan
+- ast-based import parsing
+- stdlib filtering
+- import-to-package mapping
+- requirements.txt generation/update
+- .venv creation
+- pip upgrade
+- install requirements
+- --dry-run
+- --rebuild
+- --force
+- --check
+- safe confirmations
+- summary output
