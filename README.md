@@ -2,6 +2,8 @@
 
 Utilities for creating, maintaining, checking, and removing project-local Python virtual environments under `/Users/yitzchak/Documents/Python`.
 
+Note: this utility set was developed largely with the Codex CLI.
+
 ## Files
 
 - [`venv_setup.py`](/Users/yitzchak/Documents/Python/venv_setup/venv_setup.py)
