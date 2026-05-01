@@ -1,6 +1,6 @@
 # Venv Setup
 
-Utilities for creating, maintaining, checking, and removing project-local Python virtual environments in a shared project workspace.
+Utilities for creating, maintaining, checking, and removing project-local Python virtual environments (.venv) in a shared project workspace.
 
 Note: this utility set was developed largely with the Codex CLI.
 
