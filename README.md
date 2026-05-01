@@ -1,14 +1,14 @@
 # Venv Setup
 
-Utilities for creating, maintaining, checking, and removing project-local Python virtual environments under `/Users/yitzchak/Documents/Python`.
+Utilities for creating, maintaining, checking, and removing project-local Python virtual environments in a shared project workspace.
 
 Note: this utility set was developed largely with the Codex CLI.
 
 ## Files
 
-- [`venv_setup.py`](/Users/yitzchak/Documents/Python/venv_setup/venv_setup.py)
+- [`venv_setup.py`](venv_setup.py)
   Scans project Python files, builds or updates `requirements.txt`, creates or rebuilds `.venv`, and installs requirements.
-- [`remove_venv.py`](/Users/yitzchak/Documents/Python/venv_setup/remove_venv.py)
+- [`remove_venv.py`](remove_venv.py)
   Removes `.venv` from one or more project folders without changing `requirements.txt` or other project files.
 
 ## `venv_setup.py`
@@ -43,27 +43,27 @@ Run from inside a project folder:
 
 ```bash
 cd /path/to/project
-python3 /Users/yitzchak/Documents/Python/venv_setup/venv_setup.py
+python3 /path/to/venv_setup/venv_setup.py
 ```
 
 Useful variants:
 
 ```bash
-python3 /Users/yitzchak/Documents/Python/venv_setup/venv_setup.py --dry-run
-python3 /Users/yitzchak/Documents/Python/venv_setup/venv_setup.py --check
-python3 /Users/yitzchak/Documents/Python/venv_setup/venv_setup.py --check --req
-python3 /Users/yitzchak/Documents/Python/venv_setup/venv_setup.py --rebuild --force
+python3 /path/to/venv_setup/venv_setup.py --dry-run
+python3 /path/to/venv_setup/venv_setup.py --check
+python3 /path/to/venv_setup/venv_setup.py --check --req
+python3 /path/to/venv_setup/venv_setup.py --rebuild --force
 ```
 
 ### Multi-project examples
 
-Run from `/Users/yitzchak/Documents/Python`:
+Run from a parent workspace directory that contains both `venv_setup/` and the target projects:
 
 ```bash
-cd /Users/yitzchak/Documents/Python
-python3 venv_setup/venv_setup.py --folders quiz_up cipher_suite_plus
-python3 venv_setup/venv_setup.py --folders quiz_up time vault --dry-run
-python3 venv_setup/venv_setup.py --folders quiz_up ShulBook --check
+cd /path/to/workspace
+python3 venv_setup/venv_setup.py --folders project_alpha project_beta
+python3 venv_setup/venv_setup.py --folders project_alpha project_beta project_gamma --dry-run
+python3 venv_setup/venv_setup.py --folders project_alpha project_beta --check
 ```
 
 ### Notes
@@ -85,19 +85,19 @@ python3 venv_setup/venv_setup.py --folders quiz_up ShulBook --check
 ### Single-project examples
 
 ```bash
-cd /Users/yitzchak/Documents/Python
-python3 venv_setup/remove_venv.py --folder quiz_up
-python3 venv_setup/remove_venv.py --folder alef_beis --dry-run
-python3 venv_setup/remove_venv.py --folder ShulBook --force
+cd /path/to/workspace
+python3 venv_setup/remove_venv.py --folder project_alpha
+python3 venv_setup/remove_venv.py --folder project_beta --dry-run
+python3 venv_setup/remove_venv.py --folder project_gamma --force
 ```
 
 ### Multi-project examples
 
 ```bash
-cd /Users/yitzchak/Documents/Python
-python3 venv_setup/remove_venv.py --folders ShulBook alef_beis cipher_suite_plus quiz_up test_maker time vault
-python3 venv_setup/remove_venv.py --folders quiz_up time vault --dry-run
-python3 venv_setup/remove_venv.py --folders quiz_up time vault --force
+cd /path/to/workspace
+python3 venv_setup/remove_venv.py --folders project_alpha project_beta project_gamma
+python3 venv_setup/remove_venv.py --folders project_alpha project_beta --dry-run
+python3 venv_setup/remove_venv.py --folders project_alpha project_beta --force
 ```
 
 ## Safety
@@ -107,7 +107,7 @@ python3 venv_setup/remove_venv.py --folders quiz_up time vault --force
   - an explicit confirmation prompt
 - `remove_venv.py` only deletes `.venv`
 - `venv_setup.py --rebuild` only deletes `.venv`
-- Both scripts are intended for project folders under `/Users/yitzchak/Documents/Python`
+- Both scripts are intended for project folders inside a common workspace
 
 ## Current ignore targets
 
